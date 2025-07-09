@@ -5,9 +5,8 @@ namespace Database\Seeders;
 use App\Models\Status;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
-class UserSeeder extends Seeder
+class StatusSeeder extends Seeder
 {
     /**
      * Seed the application's database.

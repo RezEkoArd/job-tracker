@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, LayoutList } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, LayoutList, ListCheck } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -14,9 +14,14 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Jobs',
-        href: '/jobs',
+        title: 'Jobs Tracker',
+        href: '/pekerjaan',
         icon: LayoutList,
+    },
+    {
+        title: 'Status Job',
+        href: '/status',
+        icon: ListCheck,
     },
 ];
 
