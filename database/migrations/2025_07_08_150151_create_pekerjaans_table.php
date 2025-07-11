@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('company');
             $table->string('location')->nullable();
             $table->text('job_url')->nullable();
-            $table->string('salary')->nullable(); // e.g., Full-time, Part-time, Contract
+            $table->string('salary')->nullable(); 
             $table->string('job_type')->nullable(); // e.g., Full-time, Part-time, Contract
             $table->date('applied_at');
             $table->foreignId('user_id')
@@ -25,7 +25,6 @@ return new class extends Migration
             $table->foreignId('status_id')
                 ->constrained('statuses')
                 ->onDelete('cascade');
-            $table->text('deadline')->nullable();
             $table->timestamps();
         });
     }

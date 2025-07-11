@@ -10,7 +10,17 @@ class Pekerjaan extends Model
 {
     /** @use HasFactory<\Database\Factories\PekerjaanFactory> */
     use HasFactory;
-    protected $guarded = [];
+    protected $fillable = [
+        'position',
+        'company',
+        'location',
+        'job_url',
+        'salary',
+        'job_type',
+        'applied_at',
+        'status_id',
+        'user_id', // Don't forget user_id!
+    ];
 
     public function status(): BelongsTo
     {

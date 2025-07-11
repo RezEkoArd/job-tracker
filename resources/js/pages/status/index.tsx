@@ -58,7 +58,6 @@ export default function Status() {
                 duration: 3000,
             });
         }
-
     },[flash]) ;
 
     const handleDelete = (id:number, name: string) => {
@@ -66,6 +65,8 @@ export default function Status() {
             destroy(route('status.destroy', id));
         }
     }
+
+    
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -77,7 +78,7 @@ export default function Status() {
                 <div className='w-1/2 '>
 
                 {statuses && statuses.length > 0 ? (
-                    <Table className='rounded-xl bg-slate-100'>
+                    <Table className='rounded-xl bg-slate-100 dark:bg-transparent'>
                     <TableHeader>
                         <TableRow>
                         <TableHead className="w-[100px]">ID</TableHead>

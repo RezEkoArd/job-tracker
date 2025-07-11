@@ -16,6 +16,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Jobs Tracker
     Route::get('pekerjaan', [PekerjaanController::class, 'index']) -> name('pekerjaan.index');
+    Route::get('pekerjaan/create', [PekerjaanController::class, 'create'])->name('pekerjaan.create');
+    Route::post('pekerjaan', [PekerjaanController::class, 'store'])->name('pekerjaan.store');
+    Route::delete('pekerjaan/{id}', [PekerjaanController::class, 'destroy'])->name('pekerjaan.destroy');
+    Route::get('pekerjaan/{id}/edit', [PekerjaanController::class, 'edit'])->name('pekerjaan.edit');
+    Route::put('pekerjaan/{id}/update', [PekerjaanController::class, 'update'])->name('pekerjaan.update');
 
     // Status Tracker
     Route::get('status', [StatusController::class, 'index'])->name('status.index');

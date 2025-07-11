@@ -12,7 +12,7 @@ class Status extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function pekerjaan() : HasMany
+    public function pekerjaans() : HasMany
     {
         return $this->hasMany(Pekerjaan::class, 'pekerjaan_id');
     }
