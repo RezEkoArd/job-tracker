@@ -15,16 +15,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -40,11 +30,20 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/id';
-import { Check, ChevronsUpDown, Pencil, Trash } from 'lucide-react';
+import { Check, ChevronsUpDown, Link2, Pencil, Trash } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Jobs', href: '/pekerjaan' },
@@ -67,13 +66,33 @@ interface JobFormData {
   applied_at: Date | undefined;
 }
 
+interface Paginator<T>{
+  current_page: number;
+  data: T[];
+  first_page_url: string| null;
+  from: number | null;
+  last_page: number;
+  last_page_url: string | null;
+  links: Array<{
+      url: string | null;
+      label: string;
+      active: boolean;
+  }>;
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number | null;
+  total: number;
+}
+
 interface PageProps extends Record<string, any> {
   flash: {
     message?: string;
     errorMsg?: string;
   };
   statuses: Status[];
-  jobs: JobFormData[];
+  jobs: Paginator<JobFormData>;
 }
 
 export default function PekerjaanDashboard() {
@@ -115,6 +134,12 @@ export default function PekerjaanDashboard() {
     console.log('delete ')
     destroy(route('pekerjaan.destroy',id))
   }
+
+  // Pagination
+  const paginationLinks = jobs?.links.filter(link => {
+    return !isNaN(Number(link.label)) || link.label === '...';
+});
+
  
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -142,13 +167,21 @@ export default function PekerjaanDashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {jobs.map((job, index) => (
+            {jobs?.data.map((job, index) => (
               <TableRow key={job.id}>
                 <TableCell className="font-medium">{index + 1}</TableCell>
                 <TableCell>{job.position}</TableCell>
                 <TableCell>{job.company}</TableCell>
                 <TableCell>{job.location ?? '-'}</TableCell>
-                <TableCell>{job.job_url ?? '-'}</TableCell>
+                <TableCell>
+                  {job.job_url ? 
+                  <a href={job.job_url} target='_blank'>
+                    <Button size="sm" variant='ghost' className='cursor-pointer bg-cyan-600'>
+                          <Link2 className="w-4 h-4" />
+                    </Button>
+                  </a>
+                  : '-'}
+                </TableCell>
                 <TableCell>{job.salary ?? '-'}</TableCell>
                 <TableCell>{job.job_type ?? '-'}</TableCell>
                 <TableCell>
@@ -196,11 +229,41 @@ export default function PekerjaanDashboard() {
           <TableFooter>
             <TableRow>
               <TableCell colSpan={8}>Total Jobs</TableCell>
-              <TableCell className="text-right">{jobs.length}</TableCell>
+              <TableCell className="text-right">{jobs.data.length}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableFooter>
         </Table>
+        <Pagination>
+                <PaginationContent >
+                    <PaginationItem>
+                        <PaginationPrevious href={jobs?.prev_page_url || '#'} />
+                    </PaginationItem>
+                    <PaginationItem className='flex flex-row'>
+                        {/* Hindari rendering ellipsis jika link-nya adalah "..." */}
+                        {paginationLinks?.map((link, index) => (
+                                <PaginationItem key={index}>
+                                    {link.url === null && link.label.includes('...') ? (
+                                        <PaginationEllipsis />
+                                    ) : (
+                                        <PaginationLink
+                                            href={link.url || '#'}
+                                            isActive={link.active}
+                                        >
+                                            {link.label}
+                                        </PaginationLink>
+                                    )}
+                                </PaginationItem>
+                            ))}
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                    <PaginationNext href={jobs?.next_page_url || '#'} />
+                    </PaginationItem>
+                </PaginationContent>
+              </Pagination>
       </div>
     </AppLayout>
   );

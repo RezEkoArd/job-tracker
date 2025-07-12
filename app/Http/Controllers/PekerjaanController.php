@@ -6,7 +6,6 @@ use App\Models\Pekerjaan;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -15,10 +14,10 @@ class PekerjaanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return Inertia::render('pekerjaan/index',[
-            'jobs' => Pekerjaan::latest()->with('status')->get(),
+            'jobs' => Pekerjaan::latest()->with('status')->latest()->paginate(10)
         ]);
     }
 
