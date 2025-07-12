@@ -97,9 +97,14 @@ class PekerjaanController extends Controller
         ]);
 
         $job->update([
-            'name' => $validate['name'],
             'position' => $validate['position'],
-            'department_id' => $validate['department_id'],
+            'company' => $validate['company'],
+            'location' => $validate['location'],
+            'job_url' => $validate['job_url'],
+            'salary' => $validate['salary'],
+            'job_type' => $validate['job_type'],
+            'applied_at' => $validate['applied_at'],
+            'status_id' => $validate['status_id'],
         ]);
 
         return redirect()->route('pekerjaan.index')->with('message', 'Tracker Job updated successfully!');

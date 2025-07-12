@@ -48,6 +48,7 @@ interface Status {
 
 interface JobFormData {
     [key: string]: string | number | Date | undefined; // Add index signature
+    id:number;
     position: string;
     company: string;
     location: string;
@@ -66,7 +67,8 @@ interface PageProps extends Record<string, any> {
 export default function CreatePekerjaan() {
     const { job, statuses } = usePage<PageProps>().props;
 
-    const { data, setData, post, processing, errors } = useForm<JobFormData>({
+    const { data, setData, put, processing, errors } = useForm<JobFormData>({
+        id: job.id,
         position: job.position || '',
         company: job.company || '',
         location: job.location|| '',
@@ -84,7 +86,7 @@ export default function CreatePekerjaan() {
     // Handler untuk pengiriman form
     function handleSubmit(e: FormEvent) {
         e.preventDefault(); 
-        post(route('pekerjaan.update'));
+        put(route('pekerjaan.update', job.id));
     }
 
     // Cari status yang dipilih berdasarkan ID untuk ditampilkan di button
