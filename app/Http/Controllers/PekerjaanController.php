@@ -16,8 +16,31 @@ class PekerjaanController extends Controller
      */
     public function index(Request $request)
     {
+        $query = Pekerjaan::query();
+
+        // Search functionality - mencari di position, company, dan location
+        if ($request->filled('search')){
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('position','like',"%{$searchTerm}%")
+                    ->orWhere('company','like',"%{$searchTerm}%")
+                    ->orWhere('location','like',"%{$searchTerm}%");
+            });
+        }
+
+        // Filter by status
+        if ($request->filled('status_id')) {
+            $query->where('status_id', $request->status);
+        }
+
+
+        //Get Result with paginate
+        $jobs = $query->with('status')->latest()->paginate(10)->withQueryString();
+
         return Inertia::render('pekerjaan/index',[
-            'jobs' => Pekerjaan::latest()->with('status')->latest()->paginate(10)
+            'jobs' => $jobs,
+            'statuses' => Status::all(), // Sesuaikan dengan model Status Anda
+            'filters' => $request->only(['search', 'status']) // Kirim current filters ke frontend
         ]);
     }
 
